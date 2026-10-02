@@ -1,0 +1,10 @@
+/target
+
+# Local comparison against PyMusicLooper
+/reference/
+
+# makepkg output
+packaging/arch/src/
+packaging/arch/pkg/
+packaging/arch/music-looper/
+packaging/arch/*.pkg.tar.*
