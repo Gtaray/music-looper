@@ -21,7 +21,7 @@ The algorithm is a port of upstream **PyMusicLooper 3.6.0** (`arkrow/PyMusicLoop
 
 ## Planned CLI (JSON on stdout, errors on stderr, non-zero exit on failure)
 
-- `analyze <path>` → `{ start, end, sampleRate, candidates: [{ start, end, score, noteDistance, loudnessDifference }] }` (samples, at the file's native rate)
+- `analyze <path> [--max-candidates N]` → `{ start, end, sampleRate, candidates: [{ start, end, score, noteDistance, loudnessDifference }] }` (samples, at the file's native rate). Candidates are all scored pairs, best first (can be MBs of JSON); `--max-candidates` (≥ 1, default all) keeps the best N. Kenku passes `--max-candidates 1`.
 - `read-tags <path>` → loop tags found (auto-detect names, see below)
 - `write-tags <path> --start N --end N [--start-tag LOOP_START --end-tag LOOP_END]`
 

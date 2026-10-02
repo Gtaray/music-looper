@@ -26,6 +26,9 @@ enum Command {
         /// Include intermediate values for comparing against PyMusicLooper
         #[arg(long)]
         debug: bool,
+        /// Only list the best N candidates (default: all)
+        #[arg(long, value_name = "N", value_parser = parse_max_candidates)]
+        max_candidates: Option<usize>,
     },
     /// Read loop tags (names auto-detected)
     ReadTags { path: PathBuf },
@@ -44,6 +47,13 @@ enum Command {
     },
 }
 
+fn parse_max_candidates(value: &str) -> Result<usize, String> {
+    match value.parse::<usize>() {
+        Ok(n) if n >= 1 => Ok(n),
+        _ => Err("must be a whole number of at least 1".into()),
+    }
+}
+
 fn print_json(value: &impl Serialize) -> Result<()> {
     println!("{}", serde_json::to_string(value)?);
     Ok(())
@@ -51,9 +61,17 @@ fn print_json(value: &impl Serialize) -> Result<()> {
 
 fn run(cli: Cli) -> Result<()> {
     match cli.command {
-        Command::Analyze { path, debug } => {
+        Command::Analyze {
+            path,
+            debug,
+            max_candidates,
+        } => {
             let audio = audio::decode(&path)?;
-            print_json(&looper::find_loop_points(&audio, debug)?)
+            let mut analysis = looper::find_loop_points(&audio, debug)?;
+            if let Some(max) = max_candidates {
+                analysis.candidates.truncate(max);
+            }
+            print_json(&analysis)
         }
         Command::ReadTags { path } => print_json(&tags::read(&path)?),
         Command::WriteTags {

@@ -34,7 +34,7 @@ music-looper analyze track.flac
 {"sampleRate":44100,"start":62513,"end":2479792,"candidates":[{"start":62513,"end":2479792,"score":0.999991670364779,"noteDistance":0.0006679611,"loudnessDifference":0.019816760379832488}, …]}
 ```
 
-`start`/`end` is the best loop; `candidates` lists the other loops considered, best first.
+`start`/`end` is the best loop; `candidates` lists the other loops considered, best first. That list can run to several MB; `--max-candidates N` keeps only the best N (N ≥ 1, default all).
 
 ### Read loop tags
 
