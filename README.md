@@ -58,7 +58,7 @@ Writes `LOOP_START`/`LOOP_END` into the file, replacing any existing loop tags. 
 
 ## Supported formats
 
-- Analysis: FLAC, WAV, Ogg Vorbis, MP3, M4A/MP4 (AAC), and Matroska/WebM files containing those codecs. Opus isn't supported yet (symphonia has no Opus decoder).
+- Analysis: FLAC, WAV, Ogg Vorbis, MP3, and Matroska/WebM files containing those codecs. Not supported: Opus (symphonia has no Opus decoder) and M4A/AAC (symphonia ignores the MP4 edit list, so the encoder delay isn't trimmed and loop points would be about 1024 samples late).
 - Tags: FLAC (Vorbis comments).
 
 ## How it works

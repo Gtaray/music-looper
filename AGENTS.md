@@ -16,7 +16,7 @@ The algorithm is a port of upstream **PyMusicLooper 3.6.0** (`arkrow/PyMusicLoop
   - `perceptual_weighting` returns **dB**, and the mel spectrogram, onset strength and `power_db = power_to_db(S_weighed, ref=np.median)` are all computed on those dB values.
   - `_prioritize_duration` reads `loop_end - loop_start` before they are set (both 0), so it never reorders anything. **Leave it out** to match.
 - **Tags:** read and write (write only on an explicit request from Kenku, never automatically).
-- **Formats:** FLAC first (the owner's library is all FLAC). No Opus yet (symphonia 0.6.1 has no Opus decoder).
+- **Formats:** FLAC first (the owner's library is mostly FLAC), plus WAV, Ogg Vorbis and MP3 (symphonia `mp3` feature; LAME gapless info is trimmed, matching Chromium's decode, verified with a test tone and a reference track). No Opus (symphonia 0.6.1 has no Opus decoder). No M4A/AAC: symphonia's MP4 reader ignores the edit list, so the 1024-sample AAC priming isn't trimmed while Chromium trims it; loop points would be ~23 ms late. Kenku only offers looping for `.flac/.wav/.ogg/.mp3`.
 - **Comparison env must be fully transient:** venv lives in `/tmp/pml-compare` (see below), never in a repo.
 
 ## Planned CLI (JSON on stdout, errors on stderr, non-zero exit on failure)
@@ -53,7 +53,7 @@ The algorithm is a port of upstream **PyMusicLooper 3.6.0** (`arkrow/PyMusicLoop
 
 ## Crates
 
-- symphonia 0.6.1 (default features cover FLAC/WAV/Ogg Vorbis; add `mp3` etc. later). 0.6 API differs from 0.5: see `~/.cargo/registry/src/*/symphonia-0.6.1/examples/basic-interleaved.rs` (`get_probe().probe(&hint, mss, fmt_opts, meta_opts)`, `format.default_track(TrackType::Audio)`, `get_codecs().make_audio_decoder(track.codec_params.as_ref().unwrap().audio().unwrap(), &dec_opts)`, `format.next_packet()` returns `Result<Option<Packet>>`, `audio_buf.spec().rate()`, `audio_buf.spec().channels().count()`, `audio_buf.copy_to_slice_interleaved(&mut Vec<f32>)`).
+- symphonia 0.6.1 (default features cover FLAC/WAV/Ogg Vorbis; `mp3` enabled). 0.6 API differs from 0.5: see `~/.cargo/registry/src/*/symphonia-0.6.1/examples/basic-interleaved.rs` (`get_probe().probe(&hint, mss, fmt_opts, meta_opts)`, `format.default_track(TrackType::Audio)`, `get_codecs().make_audio_decoder(track.codec_params.as_ref().unwrap().audio().unwrap(), &dec_opts)`, `format.next_packet()` returns `Result<Option<Packet>>`, `audio_buf.spec().rate()`, `audio_buf.spec().channels().count()`, `audio_buf.copy_to_slice_interleaved(&mut Vec<f32>)`).
 - rustfft, rayon, lofty 0.25.4, clap (derive), serde/serde_json, anyhow.
 
 ## Reference / comparison
