@@ -1,7 +1,7 @@
 # Personal Arch package. Builds the committed `main` branch of the repo this
 # file lives in. Use ./install_or_update.sh and ./uninstall.sh.
 pkgname=music-looper
-pkgver=0.1.0.r0.g0000000
+pkgver=0.1.0.r2.g736452c
 pkgrel=1
 pkgdesc="Finds seamless loop points in music and reads/writes loop tags"
 arch=('x86_64')
